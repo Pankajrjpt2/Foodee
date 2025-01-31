@@ -1,0 +1,14 @@
+# Ignore node_modules folder (for Node.js projects)
+node_modules/
+dist/
+.parcel-cache/
+
+
+# Ignore compiled files
+
+# Ignore environment files
+.env
+.env.local
+
+# Ignore VS Code settings
+.vscode/
