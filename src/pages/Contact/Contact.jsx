@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import ContactImage from "../../assets/Images/contactpage.jpg";
 
-// Extract constants
+// Define available help options for the contact form dropdown
 const HELP_OPTIONS = [
   { value: 0, label: "I need help with my Foodee online order." },
   { value: 1, label: "I found incorrect/outdated information on a page." },
@@ -25,7 +25,7 @@ const HELP_OPTIONS = [
   { value: 5, label: "Other" },
 ];
 
-// Extract components
+// Hero component for the contact page with background image and overlay
 const ContactHero = () => (
   <div className="h-[45vh] w-full relative">
     <img
@@ -41,6 +41,7 @@ const ContactHero = () => (
   </div>
 );
 
+// Reusable card component for displaying information and optional action links
 const InfoCard = ({ title, description, link }) => (
   <div className="w-full h-full rounded-3xl shadow-2xl p-8">
     <p className="text-[1.7rem] leading-[2.7rem] mb-4 font-okra">{title}</p>
@@ -69,7 +70,9 @@ InfoCard.propTypes = {
   link: PropTypes.string,
 };
 
+// Main Contact component
 const Contact = () => {
+  // State management for form data and validation errors
   const [formData, setFormData] = useState({
     helpType: "",
     fullName: "",
@@ -79,17 +82,20 @@ const Contact = () => {
   });
   const [errors, setErrors] = useState({});
 
+  // Email validation using regex pattern
   const validateEmail = (email) => {
     return String(email)
       .toLowerCase()
       .match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
   };
 
+  // Mobile number validation - allows optional input with minimum 10 digits
   const validateMobile = (mobile) => {
     if (!mobile) return true; // Optional field
     return /^\+?[\d\s-]{10,}$/.test(mobile);
   };
 
+  // Handle form field changes and clear related errors
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -99,6 +105,7 @@ const Contact = () => {
     }
   };
 
+  // Validate all form fields before submission
   const validateForm = () => {
     const newErrors = {};
     if (!formData.helpType) newErrors.helpType = "Please select an option";
@@ -117,6 +124,7 @@ const Contact = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {

@@ -7,11 +7,11 @@ import TopMenuImg from "../../assets/images/TopMenuImg.jpg";
 import OrderSummary from "../../components/OrderSummary";
 
 const texts = [
-  "Welcome to Our Restaurant..",
+  "Welcome to Our App..",
   "Discover the best food & drinks..",
-  "Delicious Meals Await..",
-  "Experience Fine Dining..",
-  "Order Now!",
+  "Delicious Meals..",
+  "Checking your diet nutrition..",
+  "Book Now!",
 ];
 
 const MenuTop = () => {
@@ -47,36 +47,46 @@ const MenuTop = () => {
   }, [displayText, isDeleting, textIndex, typingSpeed]);
 
   return (
-    <>
-      <div className="h-[45vh] w-full relative">
-        <img
-          className="w-full h-full object-cover"
-          src={TopMenuImg}
-          alt="menuimg"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/50 flex flex-col items-center justify-center">
-          <p className="text-5xl md:text-4xl lg:text-7xl font-okra text-white drop-shadow-lg font-bold">
-            Foodee
-          </p>
-          <p className="text-xl md:text-1xl lg:text-2xl text-white drop-shadow-lg text-center px-4">
-            {displayText}
-            <span className="animate-blink">|</span>
-          </p>
-        </div>
+    <div className="h-[50vh] w-full relative overflow-hidden">
+      <img
+        className="w-full h-full object-cover transform scale-105 hover:scale-100 transition-transform duration-700"
+        src={TopMenuImg}
+        alt="menuimg"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/70 flex flex-col items-center justify-center backdrop-blur-sm">
+        <p className="text-6xl md:text-5xl lg:text-7xl font-okra text-white drop-shadow-xl tracking-wider mb-4 hover:scale-105 transition-transform">
+          Foodee
+        </p>
+        <p className="text-2xl md:text-xl lg:text-2xl text-white drop-shadow-xl text-center px-4 font-light">
+          {displayText}
+          <span className="animate-blink">|</span>
+        </p>
       </div>
-    </>
+    </div>
   );
 };
+const getTomorrowDay = () => {
+  const today = new Date(); // Get today's date
+  const tomorrow = new Date(today); // Create a new date object for tomorrow
+  tomorrow.setDate(today.getDate() + 1); // Add 1 day to today's date
 
+  // Format the day name (e.g., "Monday", "Tuesday")
+  return tomorrow.toLocaleDateString("en-US", { weekday: "long" });
+};
 const Menu = () => {
   const [foods, setFoods] = useState({});
   const [cart, setCart] = useState([]);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     try {
       if (foodData && typeof foodData === "object") {
-        setFoods(foodData.foods);
+        const Day = getTomorrowDay();
+        if (foodData.weekly_meal_plan[Day]) {
+          setFoods(foodData.weekly_meal_plan[Day]);
+        } else {
+          throw new Error("No food data available for tomorrow");
+        }
       } else {
         throw new Error("Food data is not in the expected format");
       }
@@ -101,25 +111,38 @@ const Menu = () => {
   }
 
   return (
-    <div>
-      <div className="h-[45vh] w-full relative">
-        <MenuTop />
-      </div>
-      <div className="flex">
-        <div>
-          <Container maxWidth="xl" sx={{ py: 20 }}>
+    <div className="min-h-screen bg-gray-50">
+      <MenuTop />
+      <div className="flex flex-col lg:flex-row">
+        <div className="w-full lg:w-3/4">
+          <Container maxWidth="xl" sx={{ py: 8 }}>
             {Object.entries(foods).map(([category, items]) => (
-              <div key={category}>
+              <div key={category} className="mb-12">
                 <Typography
                   variant="h4"
-                  sx={{ mb: 4, textTransform: "capitalize" }}
+                  sx={{
+                    mb: 5,
+                    textTransform: "capitalize",
+                    fontWeight: "bold",
+                    position: "relative",
+                    display: "inline-block",
+                    "&::after": {
+                      content: '""',
+                      position: "absolute",
+                      bottom: -8,
+                      left: 0,
+                      width: "60%",
+                      height: "3px",
+                      backgroundColor: "primary.main",
+                    },
+                  }}
                 >
                   {category}
                 </Typography>
-                <Grid2 container spacing={5} sx={{ mb: 8 }}>
+                <Grid2 container spacing={4} sx={{ mb: 8 }}>
                   {Array.isArray(items)
                     ? items.map((food) => (
-                        <Grid2 key={food.id} item xs={12} sm={6} md={4} lg={3}>
+                        <Grid2 key={food.id} xs={12} sm={6} md={4} lg={4}>
                           <MenuCard
                             food={food}
                             cart={cart}
@@ -133,8 +156,8 @@ const Menu = () => {
             ))}
           </Container>
         </div>
-        <div>
-          <Container maxWidth="xl" sx={{ py: 20 }}>
+        <div className="w-full lg:w-1/4 lg:min-h-screen lg:sticky lg:top-0 bg-white shadow-lg">
+          <Container sx={{ py: 5, height: "100%" }}>
             <OrderSummary cart={cart} />
           </Container>
         </div>
@@ -143,12 +166,12 @@ const Menu = () => {
   );
 };
 
-// Add PropTypes for MenuCard component
+// Update PropTypes for MenuCard component
 MenuCard.propTypes = {
   food: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
+    image: PropTypes.string.isRequired,
     // Add other food properties as needed
   }).isRequired,
   cart: PropTypes.array.isRequired,
