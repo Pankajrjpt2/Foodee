@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import PropTypes from "prop-types";
 import {
   MenuItem,
   Select,
@@ -62,6 +63,12 @@ const InfoCard = ({ title, description, link }) => (
   </div>
 );
 
+InfoCard.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  link: PropTypes.string,
+};
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     helpType: "",
@@ -71,6 +78,17 @@ const Contact = () => {
     message: "",
   });
   const [errors, setErrors] = useState({});
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+  };
+
+  const validateMobile = (mobile) => {
+    if (!mobile) return true; // Optional field
+    return /^\+?[\d\s-]{10,}$/.test(mobile);
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -84,9 +102,16 @@ const Contact = () => {
   const validateForm = () => {
     const newErrors = {};
     if (!formData.helpType) newErrors.helpType = "Please select an option";
-    if (!formData.fullName) newErrors.fullName = "Name is required";
-    if (!formData.email) newErrors.email = "Email is required";
-    if (!formData.message) newErrors.message = "Message is required";
+    if (!formData.fullName.trim()) newErrors.fullName = "Name is required";
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+    if (!validateMobile(formData.mobile)) {
+      newErrors.mobile = "Please enter a valid mobile number";
+    }
+    if (!formData.message.trim()) newErrors.message = "Message is required";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -124,11 +149,14 @@ const Contact = () => {
                     </MenuItem>
                   ))}
                 </Select>
+                {errors.helpType && (
+                  <p className="text-red-500 text-sm mt-1">{errors.helpType}</p>
+                )}
               </FormControl>
               <TextField
                 label={
                   <>
-                    Full Name <span className="text-red-500">*</span>{" "}
+                    Full Name <span className="text-red-500">*</span>
                   </>
                 }
                 variant="outlined"
@@ -136,11 +164,13 @@ const Contact = () => {
                 name="fullName"
                 value={formData.fullName}
                 onChange={handleChange}
+                error={!!errors.fullName}
+                helperText={errors.fullName}
               />
               <TextField
                 label={
                   <>
-                    Email Address <span className="text-red-500">*</span>{" "}
+                    Email Address <span className="text-red-500">*</span>
                   </>
                 }
                 variant="outlined"
@@ -148,19 +178,23 @@ const Contact = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
+                error={!!errors.email}
+                helperText={errors.email}
               />
               <TextField
-                label="Mobile Number(Optional)"
+                label="Mobile Number (Optional)"
                 variant="outlined"
                 fullWidth
                 name="mobile"
                 value={formData.mobile}
                 onChange={handleChange}
+                error={!!errors.mobile}
+                helperText={errors.mobile}
               />
               <TextField
                 label={
                   <>
-                    Type text <span className="text-red-500">*</span>{" "}
+                    Type text <span className="text-red-500">*</span>
                   </>
                 }
                 multiline
@@ -168,6 +202,8 @@ const Contact = () => {
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
+                error={!!errors.message}
+                helperText={errors.message}
               />
               <div className="w-full sm:w-[25%] mt-6">
                 <Button
