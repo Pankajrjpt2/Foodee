@@ -4,11 +4,18 @@ import { Typography, Container } from "@mui/material";
 import Grid2 from "@mui/material/Grid2";
 import PropTypes from "prop-types";
 
+/**
+ * OrderSummary Component
+ * Displays a summary of the user's meal order and generates a QR code for booking
+ * @param {Object[]} cart - Array of items in the cart, each containing a name property
+ */
 const OrderSummary = ({ cart }) => {
   const [isBooking, setIsBooking] = useState(false);
   const [orderMessage, setOrderMessage] = useState(
     "Please select items to book"
   );
+
+  // Update booking state and message when cart changes
   useEffect(() => {
     if (cart.length === 0) {
       setOrderMessage("Please select items to book");
