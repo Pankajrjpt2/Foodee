@@ -1,0 +1,18 @@
+/* src/styles/tailwind.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Hide scrollbars for the entire window */
+/* Hide scrollbars but allow scrolling */
+html,
+body {
+  overflow: auto; /* Ensures content is still scrollable */
+  -ms-overflow-style: none; /* Hides scrollbar in Internet Explorer 10+ */
+  scrollbar-width: none; /* Hides scrollbar in Firefox */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none; /* Hides scrollbar in Chrome, Safari, and Edge */
+}

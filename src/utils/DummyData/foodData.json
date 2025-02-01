@@ -1,0 +1,130 @@
+{
+  "foods": {
+    "breakfast": [
+      {
+        "id": 1,
+        "name": "Idli",
+        "category": "South Indian",
+        "calories": 39,
+        "protein_g": 2,
+        "fat_g": 0.2,
+        "carbs_g": 8,
+        "image": "https://cdn.pixabay.com/photo/2017/06/16/11/38/breakfast-2408818_1280.jpg"
+      },
+      {
+        "id": 2,
+        "name": "Dosa",
+        "category": "South Indian",
+        "calories": 133,
+        "protein_g": 2.7,
+        "fat_g": 3.7,
+        "carbs_g": 21,
+        "image": "https://cdn.pixabay.com/photo/2022/01/27/07/34/dosa-6971360_1280.jpg"
+      },
+      {
+        "id": 3,
+        "name": "Aloo Paratha",
+        "category": "North Indian",
+        "calories": 320,
+        "protein_g": 7,
+        "fat_g": 10,
+        "carbs_g": 45,
+        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Aloo_Paratha_also_known_as_Batatay_Jo_Phulko.jpg/2560px-Aloo_Paratha_also_known_as_Batatay_Jo_Phulko.jpg"
+      },
+      {
+        "id": 4,
+        "name": "Poha",
+        "category": "North Indian",
+        "calories": 250,
+        "protein_g": 5,
+        "fat_g": 5,
+        "carbs_g": 50,
+        "image": "https://www.spiceupthecurry.com/wp-content/uploads/2014/04/batata-poha-recipe-1.jpg"
+      }
+    ],
+    "lunch": [
+      {
+        "id": 5,
+        "name": "Sambar Rice",
+        "category": "South Indian",
+        "calories": 350,
+        "protein_g": 10,
+        "fat_g": 5,
+        "carbs_g": 65,
+        "image": "https://rakskitchen.net/wp-content/uploads/2011/03/DSC_2563_thumb[3].jpg"
+      },
+      {
+        "id": 6,
+        "name": "Rajma Chawal",
+        "category": "North Indian",
+        "calories": 323,
+        "protein_g": 13,
+        "fat_g": 2.2,
+        "carbs_g": 62,
+        "image": "https://i0.wp.com/aartimadan.com/wp-content/uploads/2021/03/Rajma-Chawal.jpg?w=1000&ssl=1"
+      },
+      {
+        "id": 7,
+        "name": "Palak Paneer",
+        "category": "North Indian",
+        "calories": 190,
+        "protein_g": 10,
+        "fat_g": 12,
+        "carbs_g": 14,
+        "image": "https://healthynibblesandbits.com/wp-content/uploads/2020/01/Saag-Paneer-1.jpg"
+      },
+      {
+        "id": 8,
+        "name": "Dal Makhani",
+        "category": "North Indian",
+        "calories": 280,
+        "protein_g": 10,
+        "fat_g": 12,
+        "carbs_g": 30,
+        "image": "https://www.sharmispassions.com/wp-content/uploads/2012/05/dal-makhani7.jpg"
+      }
+    ],
+    "snacks": [
+      {
+        "id": 9,
+        "name": "Vada",
+        "category": "South Indian",
+        "calories": 140,
+        "protein_g": 4,
+        "fat_g": 6,
+        "carbs_g": 18,
+        "image": "https://media.istockphoto.com/id/2159618192/photo/south-indian-vada-medu-vada.jpg?s=1024x1024&w=is&k=20&c=We-U1G5mcO7oohd7-YYf5Bk3dyUtwX6xUT5a0WkZcLM="
+      },
+      {
+        "id": 10,
+        "name": "Chole Bhature",
+        "category": "North Indian",
+        "calories": 450,
+        "protein_g": 14,
+        "fat_g": 15,
+        "carbs_g": 65,
+        "image": "https://cdn.pixabay.com/photo/2022/12/28/17/44/bowl-7683485_1280.jpg"
+      },
+      {
+        "id": 11,
+        "name": "Samosa",
+        "category": "North Indian",
+        "calories": 260,
+        "protein_g": 6,
+        "fat_g": 14,
+        "carbs_g": 30,
+        "image": "https://c.ndtvimg.com/2023-03/0m65kep_samosa_625x300_10_March_23.jpg"
+      },
+      {
+        "id": 12,
+        "name": "Pani Puri",
+        "category": "North Indian",
+        "calories": 200,
+        "protein_g": 3,
+        "fat_g": 6,
+        "carbs_g": 36,
+        "image": "https://preview.redd.it/vxvo5tdgo1a71.jpg?width=1080&crop=smart&auto=webp&s=8fa5c139ecfb89ec6412e88666253ccf1edcb7ff"
+      }
+    ]
+  }
+}
