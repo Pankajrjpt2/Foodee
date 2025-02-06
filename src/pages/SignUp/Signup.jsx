@@ -2,7 +2,7 @@ import React from "react";
 import Header from "../../components/Header/Header";
 import LoginImage from "../../assets/Images/Login.png";
 import { SiGnuprivacyguard } from "react-icons/si";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import {
   Avatar,
   Grid2,
@@ -16,13 +16,17 @@ import {
   Tabs,
   TextField,
 } from "@mui/material";
+import PropTypes from "prop-types";
+import axios from "axios";
 
 // Separate form component for better organization
-const SignUpForm = () => {
+const SignUpForm = ({ handleInputChange, handleSignUp, isLoading }) => {
   return (
     <>
       <div className="w-full flex flex-col space-y-[0.4rem]">
         <TextField
+          onChange={handleInputChange}
+          name="fullname"
           variant="standard"
           label="Full Name"
           required
@@ -30,6 +34,8 @@ const SignUpForm = () => {
           className="w-full"
         />
         <TextField
+          onChange={handleInputChange}
+          name="email"
           variant="standard"
           label="Email Address"
           required
@@ -37,6 +43,8 @@ const SignUpForm = () => {
           className="w-full"
         />
         <TextField
+          onChange={handleInputChange}
+          name="username"
           variant="standard"
           label="Username"
           required
@@ -44,6 +52,8 @@ const SignUpForm = () => {
           className="w-full"
         />
         <TextField
+          onChange={handleInputChange}
+          name="password"
           variant="standard"
           label="Password"
           type="password"
@@ -61,8 +71,13 @@ const SignUpForm = () => {
         />
       </div>
       <div className="w-full flex flex-col mt-[-10px]">
-        <Button variant="contained" className="w-[100%]">
-          Sign Up
+        <Button
+          onClick={handleSignUp}
+          variant="contained"
+          className="w-[100%]"
+          disabled={isLoading}
+        >
+          {isLoading ? "Signing up..." : "Sign Up"}
         </Button>
         <div className="w-full flex flex-col mt-[5px]">
           <Typography>
@@ -77,15 +92,64 @@ const SignUpForm = () => {
   );
 };
 
+SignUpForm.propTypes = {
+  handleInputChange: PropTypes.func.isRequired,
+  handleSignUp: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+};
+
 const SignUpPage = () => {
   const [currentTab, setCurrentTab] = React.useState(1);
+  const [formData, setFormData] = React.useState({
+    fullname: "",
+    email: "",
+    username: "",
+    password: "",
+  });
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState("");
 
   const handleChange = (event, newValue) => {
     if (newValue === 0) {
       navigate("/login");
     }
     setCurrentTab(newValue);
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const validateForm = () => {
+    if (
+      !formData.fullname ||
+      !formData.email ||
+      !formData.username ||
+      !formData.password
+    ) {
+      setError("All fields are required");
+      return false;
+    }
+    if (!formData.email.includes("@")) {
+      setError("Please enter a valid email address");
+      return false;
+    }
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSignUp = async (formData) => {
+    try {
+      await axios.post("http://localhost:3000/signup", formData);
+      console.log("Form data:", formData);
+    } catch (error) {
+      console.error("Signup error:", error);
+    }
   };
 
   const paperStyles = {
@@ -139,7 +203,17 @@ const SignUpPage = () => {
                 <p className="text-2xl font-bold">Sign Up</p>
               </Grid2>
 
-              <SignUpForm />
+              {error && (
+                <Typography color="error" className="text-center">
+                  {error}
+                </Typography>
+              )}
+
+              <SignUpForm
+                handleInputChange={handleInputChange}
+                handleSignUp={handleSignUp}
+                isLoading={isLoading}
+              />
             </Paper>
           </Grid2>
         </div>

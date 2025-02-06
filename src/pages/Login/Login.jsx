@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../../components/Header/Header";
 import LoginImage from "../../assets/Images/Login.png";
 import { FaUnlockAlt } from "react-icons/fa";
@@ -17,12 +17,16 @@ import {
   TextField,
 } from "@mui/material";
 
+import PropTypes from "prop-types";
+import axios from "axios";
 // Separate form component for better organization
-const LoginForm = () => {
+const LoginForm = ({ handleInputChange, handleLogin }) => {
   return (
     <>
       <div className="w-full flex flex-col space-y-4">
         <TextField
+          onChange={handleInputChange}
+          name="username"
           variant="standard"
           label="Username"
           required
@@ -30,6 +34,8 @@ const LoginForm = () => {
           className="w-full"
         />
         <TextField
+          onChange={handleInputChange}
+          name="password"
           variant="standard"
           label="Password"
           type="password"
@@ -47,7 +53,7 @@ const LoginForm = () => {
         />
       </div>
       <div className="w-full flex flex-col">
-        <Button variant="contained" className="w-[100%]">
+        <Button onClick={handleLogin} variant="contained" className="w-[100%]">
           Sign In
         </Button>
       </div>
@@ -58,7 +64,7 @@ const LoginForm = () => {
           </Link>
         </Typography>
         <Typography>
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link sx={{ textDecoration: "none" }} href="/signup">
             Sign Up
           </Link>
@@ -67,9 +73,22 @@ const LoginForm = () => {
     </>
   );
 };
-
+LoginForm.propTypes = {
+  handleInputChange: PropTypes.func.isRequired,
+  handleLogin: PropTypes.func.isRequired,
+};
 const LoginPage = () => {
   const [currentTab, setCurrentTab] = React.useState(0);
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
   const navigate = useNavigate();
 
   const handleChange = (event, newValue) => {
@@ -77,6 +96,40 @@ const LoginPage = () => {
       navigate("/signup");
     }
     setCurrentTab(newValue);
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post("http://localhost:3000/login", {
+        username: formData.username,
+        password: formData.password,
+      });
+      console.log(response);
+      if (response.status === 200) {
+        navigate("/");
+      } else {
+        alert("Invalid username or password");
+      }
+      // Handle successful login
+      console.log("Login successful:", response.data);
+      // Add your navigation or state updates here
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        console.log(error.response.data);
+        // Handle invalid credentials
+        alert("Invalid username or password");
+        // Or use a more user-friendly way to show errors, like:
+        console.log(error.response.data);
+        alert(error.response.data.message);
+
+        // setError('Invalid username or password');
+      } else {
+        // Handle other types of errors
+        alert("An error occurred during login");
+        console.error("Login error:", error);
+      }
+    }
   };
 
   const paperStyles = {
@@ -130,7 +183,10 @@ const LoginPage = () => {
                 <p className="text-2xl font-bold">Sign In</p>
               </Grid2>
 
-              <LoginForm />
+              <LoginForm
+                handleLogin={handleLogin}
+                handleInputChange={handleInputChange}
+              />
             </Paper>
           </Grid2>
         </div>
